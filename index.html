@@ -96,11 +96,11 @@
         <h2>Deeq Chat</h2>
         
         <div class="key-box">
-            <input type="password" id="apiKeyInput" placeholder="Halkan ku dhaji (Paste) API Key-gaaga...">
+            <input type="password" id="apiKeyInput" placeholder="Halkan ku dhaji API Key-gaaga (Hal mar ayaa la gelinaa)...">
         </div>
 
         <div class="chat-box" id="chatBox">
-            <div class="message ai-message">Ku soo dhowow Deeq Chat! Geli API Key-gaaga sare, dabadeedna ila hadol.</div>
+            <div class="message ai-message">Ku soo dhowow Deeq Chat! Geli API Key-gaaga sare, kadibna asxaabtaadana la wadaag link-ga.</div>
         </div>
         <div class="input-group">
             <input type="text" id="userInput" placeholder="Halkan ku qor fariintaada...">
@@ -113,6 +113,17 @@
         const userInput = document.getElementById('userInput');
         const chatBox = document.getElementById('chatBox');
         const apiKeyInput = document.getElementById('apiKeyInput');
+
+        // Marka bogga la furo, hubi haddii furaha hore loo kaydiyay
+        const savedKey = localStorage.getItem('deeq_chat_api_key');
+        if (savedKey) {
+            apiKeyInput.value = savedKey;
+        }
+
+        // Marka qofku beddelo ama geliyo furaha, si toos ah u kaydi
+        apiKeyInput.addEventListener('input', function() {
+            localStorage.setItem('deeq_chat_api_key', apiKeyInput.value.trim());
+        });
 
         sendBtn.addEventListener('click', sendMessage);
         userInput.addEventListener('keypress', function (e) {
@@ -147,7 +158,6 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                // Halkan waxaa lagu beddelay gemini-3.6-flash
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${API_KEY}`, {
                     method: 'POST',
                     headers: {
