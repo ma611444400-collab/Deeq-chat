@@ -96,6 +96,9 @@
         const userInput = document.getElementById('userInput');
         const chatBox = document.getElementById('chatBox');
 
+        // Halkan geli API Key-gaaga hadhow markaad rabto inuu AI dhab ah ka jawaabo
+        const API_KEY = "HALKAN_GELI_API_KEY-GAAGA"; 
+
         sendBtn.addEventListener('click', sendMessage);
         userInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
@@ -103,10 +106,11 @@
             }
         });
 
-        function sendMessage() {
+        async function sendMessage() {
             const text = userInput.value.trim();
             if (text === '') return;
 
+            // 1. Muuji fariintaada
             const userMsgDiv = document.createElement('div');
             userMsgDiv.classList.add('message', 'user-message');
             userMsgDiv.textContent = text;
@@ -115,13 +119,23 @@
             userInput.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            setTimeout(() => {
-                const aiMsgDiv = document.createElement('div');
-                aiMsgDiv.classList.add('message', 'ai-message');
-                aiMsgDiv.textContent = "Waan helay fariintaada: '" + text + "'.";
-                chatBox.appendChild(aiMsgDiv);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 500);
+            // 2. Muuji fariin sugitaan ah
+            const aiMsgDiv = document.createElement('div');
+            aiMsgDiv.classList.add('message', 'ai-message');
+            aiMsgDiv.textContent = "Waa la socdaa, fadlan sug...";
+            chatBox.appendChild(aiMsgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                // Tani waa meesha aan mustaqbalka ku xiri doono Gemini ama OpenAI API
+                setTimeout(() => {
+                    aiMsgDiv.textContent = "Waan helay su'aashaada: '" + text + "'. Diyaar ayay u tahay in lagu xiro API-ga AI-ga!";
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }, 1000);
+
+            } catch (error) {
+                aiMsgDiv.textContent = "Waan ka xumahay, qalad ayaa dhacay.";
+            }
         }
     </script>
 
